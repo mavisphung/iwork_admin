@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.springframework.org/schema/data/jaxb"
+      xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <th:block th:include="fragments/head"></th:block>
+</head>
+<body>
+<div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <th:block th:include="fragments/header"></th:block>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+        <!-- partial -->
+        <!-- partial:partials/_sidebar.html -->
+        <th:block th:include="fragments/nav"></th:block>
+        <!-- partial -->
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-md-6 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="box-header-inline">
+                                    <h3>Device Detail</h3>
+                                </div>
+                                <form class="forms-sample" th:action="@{~/updateDevice}" method="post">
+                                    <div class="form-group">
+                                        <label for="username">Username</label>
+                                        <input type="text" class="form-control" id="username" disabled
+                                               th:value="${device.account.username}">
+                                        <input type="hidden" class="form-control" id="accountId"
+                                               th:value="${device.accountId}" name="accountId">
+                                        <input type="hidden" class="form-control" id="id"
+                                               th:value="${device.id}" name="id">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name">Device</label>
+                                        <input type="text" class="form-control" id="name"
+                                               th:value="${device.name}" name="name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="macAddress">Mac Address</label>
+                                        <input type="text" class="form-control" id="macAddress"
+                                               th:value="${device.macAddress}" name="macAddress">
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Status</label>
+                                        <div class="col-sm-3">
+                                            <select class="form-control" name="status">
+                                                <option value="1" th:selected="${device.status == 1}">Active
+                                                </option>
+                                                <option value="0" th:selected="${device.status == 0}">Inactive
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary mr-2">Update</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <th:block th:include="fragments/footer"></th:block>
+            <!-- Custom js for this page-->
+</body>
+</html>

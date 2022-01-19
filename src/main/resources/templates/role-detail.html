@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.springframework.org/schema/data/jaxb"
+      xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <th:block th:include="fragments/head"></th:block>
+</head>
+<body>
+<div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <th:block th:include="fragments/header"></th:block>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+        <!-- partial -->
+        <!-- partial:partials/_sidebar.html -->
+        <th:block th:include="fragments/nav"></th:block>
+        <!-- partial -->
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-md-6 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="box-header-inline">
+                                    <h3>Role Detail</h3>
+                                </div>
+                                <form class="forms-sample" th:action="@{~/updateRole}" method="post">
+                                    <input type="hidden" name="id" class="form-control" id="id"
+                                           th:value="${role.id}">
+                                    <div class="form-group">
+
+                                        <label for="rolename">Role name</label>
+                                        <input type="text" class="form-control" id="rolename"
+                                               placeholder="role name" name="roleName" th:value="${role.roleName}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Description</label>
+                                        <input type="text" class="form-control" id="description"
+                                               placeholder="description" name="description" th:value="${role.description}" >
+                                    </div>
+                                    <button type="submit" class="btn btn-primary mr-2">Update</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <th:block th:include="fragments/footer"></th:block>
+            <!-- Custom js for this page-->
+</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.springframework.org/schema/data/jaxb"
+      xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <th:block th:include="fragments/head"></th:block>
+</head>
+<body>
+<div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <th:block th:include="fragments/header"></th:block>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+        <!-- partial -->
+        <!-- partial:partials/_sidebar.html -->
+        <th:block th:include="fragments/nav"></th:block>
+        <!-- partial -->
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="card">
+                    <div class="card-body">
+                        <!-- Modal starts -->
+                        <div class="modal fade" id="exampleModal-2" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel-2" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel-2">Add new device</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="cmxform" id="addNewDevice" th:action="@{~/addNewDevice}"
+                                              method="post">
+                                            <fieldset>
+                                                <div class="form-group">
+                                                    <label for="username">Username</label>
+                                                    <input id="username" class="form-control"
+                                                           name="username" type="text" disabled
+                                                           th:value="${userDetail.username}">
+                                                    <input id="accountId" name="accountId" th:value="${userDetail.id}"
+                                                           type="hidden"/>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="name">Name of Device</label>
+                                                    <input id="name" class="form-control"
+                                                           name="name" type="text">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="macAddress">Mac Address</label>
+                                                    <input id="macAddress" class="form-control"
+                                                           name="macAddress" type="text">
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Status</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" name="status">
+                                                            <option value="1">Active</option>
+                                                            <option value="0">Inactive</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <input class="btn btn-primary" type="submit"
+                                                       value="Add">
+                                            </fieldset>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal Ends -->
+                        <h3>Employee Detail</h3>
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home-1"
+                                   role="tab" aria-controls="home-1" aria-selected="true">Information</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile-1"
+                                   role="tab" aria-controls="profile-1" aria-selected="false">Device</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact-1"
+                                   role="tab" aria-controls="contact-1" aria-selected="false">Report</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="home-1" role="tabpanel"
+                                 aria-labelledby="home-tab">
+                                <form class="forms-sample" th:action="@{~/updateEmployee}" method="post">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Company</label>
+                                        <div class="col-sm-3">
+                                            <select class="form-control" name="companyId">
+                                                <option th:each="company : ${company}"
+                                                        th:value="${company.id}"
+                                                        th:utext="${company.name}"/>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="username">Username</label>
+                                        <input type="text" class="form-control" id="usernameEmp"
+                                               placeholder="Username" name="username"
+                                               th:value="${userDetail.username}" disabled>
+                                        <input name="accountId" th:value="${userDetail.id}"
+                                               type="hidden"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="firstName">First Name</label>
+                                        <input type="text" class="form-control" id="firstName"
+                                               placeholder="First Name" name="firstName"
+                                               th:value="${accountInfo.firstName}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="lastName">Last Name</label>
+                                        <input type="text" class="form-control" id="lastName"
+                                               placeholder="Last Name" name="lastName"
+                                               th:value="${accountInfo.lastName}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="sex">Sex</label>
+                                        <input type="text" class="form-control" id="sex"
+                                               placeholder="Last Name" name="sex"
+                                               th:value="${accountInfo.sex}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address">Address</label>
+                                        <input type="text" class="form-control"
+                                               id="address" placeholder="Address" name="address"
+                                               th:value="${accountInfo.address}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phone">Phone Number</label>
+                                        <input type="number" class="form-control"
+                                               id="phone" placeholder="Phone Number" name="phone"
+                                               th:value="${accountInfo.phone}">
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Role</label>
+                                        <div class="col-sm-3">
+                                            <select class="form-control" name="role">
+                                                <option th:each="role : ${role}"
+                                                        th:value="${role.id}"
+                                                        th:utext="${role.roleName}"
+                                                        th:selected="${userDetail.roleId == role.id}"
+                                                />
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Title</label>
+                                        <div class="col-sm-3">
+                                            <select class="form-control" name="titleId">
+                                                <option th:each="title : ${title}"
+                                                        th:value="${title.id}"
+                                                        th:utext="${title.titleName}"
+                                                        th:selected="${userDetail.titleId == title.id}"/>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">Status</label>
+                                        <div class="col-sm-3">
+                                            <select class="form-control" name="status">
+                                                <option value="1" th:selected="${userDetail.status == 1}">Active
+                                                </option>
+                                                <option value="0" th:selected="${userDetail.status == 0}">Inactive
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary mr-2">Update</button>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" id="profile-1" role="tabpanel"
+                                 aria-labelledby="profile-tab">
+                                <button type="button" class="btn btn-success btn-sm"
+                                        data-toggle="modal"
+                                        data-target="#exampleModal-2" style="margin-bottom: 10px">
+                                    Add
+                                    new device<i
+                                        class="mdi mdi-play-circle ml-1"></i>
+                                </button>
+                                <table id="order-listing" class="table dataTable no-footer" role="grid"
+                                       aria-describedby="order-listing_info">
+                                    <thead>
+                                    <tr role="row">
+                                        <th class="sorting" tabindex="0" aria-controls="order-listing"
+                                            rowspan="1" colspan="1"
+                                            aria-label="Purchased On: activate to sort column ascending"
+                                            style="width: 100px;">Device
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="order-listing"
+                                            rowspan="1" colspan="1"
+                                            aria-label="Customer: activate to sort column ascending"
+                                            style="width: 72px;">Mac Address
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="order-listing"
+                                            rowspan="1" colspan="1"
+                                            aria-label="Base Price: activate to sort column ascending"
+                                            style="width: 78px;">Status
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="order-listing"
+                                            rowspan="1" colspan="1"
+                                            aria-label="Base Price: activate to sort column ascending"
+                                            style="width: 78px;">Actions
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr role="row" class="odd" th:each="devices : ${devices}">
+                                        <td th:text="${devices.name}"></td>
+                                        <td th:text="${devices.macAddress}"></td>
+                                        <td th:text="${devices.status}" class="deviceStatus"></td>
+                                        <td>
+                                            <a th:href="@{/deviceDetail?id={id}(id=${devices.id})}"
+                                               class="badge badge-pill badge-success w-10px">
+                                                <i class="fa fa-info"></i>
+                                            </a>
+                                            <a th:href="@{/removeDevice?id={id}(id=${devices.id})}"
+                                               class="badge badge-pill badge-danger w-10px">
+                                                <i class="fa fa-close"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane fade" id="contact-1" role="tabpanel"
+                                 aria-labelledby="contact-tab">
+                                <div class="col-lg-12 grid-margin d-flex flex-column">
+                                    <div class="row">
+                                        <div class="col-md-3 grid-margin stretch-card">
+                                            <div class="card">
+                                                <div class="card-body text-center">
+                                                    <div class="text-success mb-4">
+                                                        <i class="mdi mdi-verified mdi-36px"></i>
+                                                        <p class="font-weight-medium mt-2">Time Work Today</p>
+                                                    </div>
+                                                    <h1 class="font-weight-light" th:text="${timeWorkToday}"></h1>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 grid-margin stretch-card">
+                                            <div class="card">
+                                                <div class="card-body text-center">
+                                                    <div class="text-danger mb-4">
+                                                        <i class="mdi mdi-chart-pie mdi-36px"></i>
+                                                        <p class="font-weight-medium mt-2">Time Retirement Today</p>
+                                                    </div>
+                                                    <h1 class="font-weight-light" th:text="${timeRetirementToday}"></h1>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 grid-margin stretch-card">
+                                            <div class="card">
+                                                <div class="card-body text-center">
+                                                    <canvas id="myCanvasDetail" style="width: 150px; height: 150px;">
+
+                                                    </canvas>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <th:block th:include="fragments/footer"></th:block>
+            <!-- Custom js for this page-->
+            <script src="/js/data-table.js"></script>
+            <script src="/js/form-validation.js"></script>
+            <script src="/js/bt-maxLength.js"></script>
+            <script src="/js/tabs.js"></script>
+            <script src="/js/toastDemo.js"></script>
+            <!-- End custom js for this page-->
+            <script th:inline="javascript">
+                $(document).ready(function () {
+                    var status = $('.deviceStatus');
+                    for (var i = 0; i < status.length; i++) {
+                        var textStatus = status[i].innerHTML;
+                        var change;
+                        if (textStatus === '0') {
+                            change = textStatus.replace('0', '<span class="badge badge-danger badge-pill">Inactive</span>');
+                        } else if (textStatus === '1') {
+                            change = textStatus.replace('1', '<span class="badge badge-success badge-pill">Active</span>');
+                        }
+                        status[i].innerHTML = change;
+                    }
+
+                    var timeWork = [[${timeWorkALl}]];
+                    var timeRetirement = [[${timeRetirementAll}]];
+
+                    var timeWorkInSecond = Number(timeWork.split(':')[0])*60+Number(timeWork.split(':')[1])*60+Number(timeWork.split(':')[2])
+                    var timeRetirementInSecond = Number(timeRetirement.split(':')[0])*60+Number(timeRetirement.split(':')[1])*60+Number(timeRetirement.split(':')[2])
+                    var ctx = $("#myCanvasDetail");
+                    //pie chart data
+                    var data = [timeWorkInSecond, timeRetirementInSecond];
+                    //draw
+                    var piechart = new Chart(ctx, {
+                        type: "pie",
+                        data:{
+                            datasets:[{
+                                data: data,
+                                backgroundColor:[
+                                    "red",
+                                    "blue"
+                                ],
+                                label: "Time"
+
+                            }],
+                            labels: [
+                                "Time Work All (" + timeWork + ")",
+                                "Time Retirement All (" + timeRetirement + ")"
+                            ]
+                        },
+                        options: {
+                            tooltips:{
+                                callbacks: {
+                                    label: function(tooltipItem, data){
+                                        return data.labels[tooltipItem.index];
+                                    }
+                                }
+                            },
+                            responsive: true
+                        }
+                    });
+                });
+                resetToastPosition();
+                /*<![CDATA[*/
+                var message = [[${isExisting}]];
+                /*]]>*/
+                if(message !== '') {
+                    $.toast({
+                        heading: 'Warning',
+                        text: message,
+                        showHideTransition: 'slide',
+                        icon: 'warning',
+                        loaderBg: '#57c7d4',
+                        position: 'top-right'
+                    })
+                }
+            </script>
+</body>
+</html>

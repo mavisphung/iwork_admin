@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.springframework.org/schema/data/jaxb"
+      xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <th:block th:include="fragments/head"></th:block>
+</head>
+<body>
+<div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <th:block th:include="fragments/header"></th:block>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+        <!-- partial -->
+        <!-- partial:partials/_sidebar.html -->
+        <th:block th:include="fragments/nav"></th:block>
+        <!-- partial -->
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="card">
+                    <div class="card-body">
+                        <!-- Modal starts -->
+                        <div class="modal fade" id="exampleModal-2" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel-2" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel-2">Add new absence type</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="forms-sample" th:action="@{~/addNewAbsenceType}" method="post">
+
+                                            <div class="form-group">
+                                                <label for="description">Description</label>
+                                                <input type="text" class="form-control" id="description"
+                                                       placeholder="description" name="description">
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-4 col-form-label">Apply to</label>
+                                                <div class="col-sm-5">
+                                                    <select class="form-control" name="appliedTo">
+                                                        <option value="A">All
+                                                        </option>
+                                                        <option value="F">Female
+                                                        </option>
+                                                        <option value="M">Male
+                                                        </option>
+                                                        <option value="O">Other
+                                                        </option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal Ends -->
+                        <div class="row no-padding-margin">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <div id="order-listing_wrapper"
+                                         class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+                                        <div class="row no-padding-margin">
+                                            <div class="col-sm-12">
+                                                <div class="box-header-inline">
+                                                    <h3>Absence Type List</h3>
+                                                    <button type="button" class="btn btn-success btn-sm"
+                                                            data-toggle="modal"
+                                                            data-target="#exampleModal-2" style="margin-bottom: 10px">
+                                                        Add
+                                                        new<i
+                                                            class="mdi mdi-play-circle ml-1"></i>
+                                                    </button>
+                                                </div>
+                                                <table id="order-listing" class="table dataTable no-footer" role="grid"
+                                                       aria-describedby="order-listing_info">
+                                                    <thead>
+                                                    <tr role="row">
+                                                        <th class="sorting_asc" tabindex="0"
+                                                            aria-controls="order-listing" rowspan="1" colspan="1"
+                                                            aria-sort="ascending"
+                                                            aria-label="Order #: activate to sort column descending"
+                                                            style="width: 55px;">Description
+                                                        </th>
+                                                        <th class="sorting" tabindex="0" aria-controls="order-listing"
+                                                            rowspan="1" colspan="1"
+                                                            aria-label="Purchased On: activate to sort column ascending"
+                                                            style="width: 100px;">Apply to
+                                                        </th>
+
+                                                        <th class="sorting" tabindex="0" aria-controls="order-listing"
+                                                            rowspan="1" colspan="1"
+                                                            aria-label="Actions: activate to sort column ascending"
+                                                            style="width: 60px;">Actions
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr role="row" class="odd" th:each="absenceType : ${absenceTypes}">
+                                                        <td class="sorting_1"
+                                                            th:text="${absenceType.description}"></td>
+                                                        <td th:text="${absenceType.appliedTo}"></td>
+                                                        <td>
+                                                            <a th:href="@{/absenceTypeDetail?id={id}(id=${absenceType.id})}"
+                                                               class="badge badge-pill badge-success w-10px"
+                                                               style="margin-bottom: 5px">
+                                                                <i class="fa fa-info"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <th:block th:include="fragments/footer"></th:block>
+            <!-- Custom js for this page-->
+            <script src="/js/data-table.js"></script>
+            <script src="/js/alerts.js"></script>
+            <script src="/js/avgrund.js"></script>
+            <!--            <script th:inline="javascript">-->
+            <!--                $(document).ready(function () {-->
+            <!--                    var status = $('.employeeStatus');-->
+            <!--                    for (var i = 0; i < status.length; i++) {-->
+            <!--                        var textStatus = status[i].innerHTML;-->
+            <!--                        var change;-->
+            <!--                        if (textStatus === '0') {-->
+            <!--                            change = textStatus.replace('0', '<span class="badge badge-danger badge-pill">Inactive</span>');-->
+            <!--                        } else if (textStatus === '1') {-->
+            <!--                            change = textStatus.replace('1', '<span class="badge badge-success badge-pill">Active</span>');-->
+            <!--                        }-->
+            <!--                        status[i].innerHTML = change;-->
+            <!--                    }-->
+
+            <!--                });-->
+            <!--            </script>-->
+</body>
+</html>

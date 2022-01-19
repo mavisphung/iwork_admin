@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.springframework.org/schema/data/jaxb"
+      xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <th:block th:include="fragments/head"></th:block>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.com/libraries/Chart.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+</head>
+<body>
+<div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <th:block th:include="fragments/header"></th:block>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+        <!-- partial -->
+        <!-- partial:partials/_sidebar.html -->
+        <th:block th:include="fragments/nav"></th:block>
+        <!-- partial -->
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-lg-6 grid-margin stretch-card">
+                        <div class="card" style="height: 330px !important;">
+                            <div class="card-body">
+                                <div class="col-12">
+                                    <div id="reportrange" class="col-7"
+                                         style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                                        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                                        <span></span> <b class="caret"></b>
+                                    </div>
+                                </div>
+                                <div class="col-12" style="margin: 20px 0;">
+                                    <div>
+                                        <label>Time Work: </label><span id="timeWorkBetween" class="pl-2"></span>
+                                    </div>
+                                    <div>
+                                        <label>Time Retirement: </label><span id="timeRetirementBetween" class="pl-2"></span>
+                                    </div>
+                                </div>
+                                <script>
+                                    var start = moment().subtract(1, 'month');
+                                    var end = moment();
+
+                                    function cb(start, end) {
+                                        $("#order-listing tbody").html('');
+                                        $("#timeRetirementBetween").html('');
+                                        $("#timeWorkBetween").html('');
+                                        $('#reportrange span')
+                                            .html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                                        var dataAjax = {
+                                            startDate: start.format('YYYY-MM-DD'),
+                                            endDate: end.format('YYYY-MM-DD')
+                                        }
+                                        $.ajax({
+                                            url: '/get-report-between-date',
+                                            type: 'POST',
+                                            contentType: 'application/json',
+                                            data: JSON.stringify(dataAjax),
+                                            success: function (results) {
+                                                console.log(results);
+                                                $.each(results.reports, function (index, result) {
+                                                    var row = '<tr role="row" class="odd">' +
+                                                        '<td class="sorting_1"> ' + result.username + ' </td> ' +
+                                                        '<td> ' + result.macAddress + ' </td> ' +
+                                                        '<td> ' + result.dateWork + ' </td> ' +
+                                                        '<td> ' + result.startTimeWork + ' </td> ' +
+                                                        '<td> ' + result.timeWork + ' </td> ' +
+                                                        '<td> ' + result.timeRetirement + ' </td> +' +
+                                                        '</tr>';
+                                                    $("#order-listing tbody").append(row);
+                                                });
+                                                $("#timeRetirementBetween").html(results.timeRetirementBetween);
+                                                $("#timeWorkBetween").html(results.timeWorkBetween);
+                                            },
+                                            error: function (e) {
+                                                console.log(e);
+                                            }
+                                        });
+                                    }
+
+                                    $('#reportrange').daterangepicker({
+                                        startDate: start,
+                                        endDate: end,
+                                        ranges: {
+                                            'Today': [moment(), moment()],
+                                            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                                            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                                            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                                            // 'This Month': [moment().startOf('month'), moment().endOf('month')],
+                                            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                                        }
+                                    }, cb);
+                                    cb(start, end);
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 grid-margin d-flex flex-column">
+                        <div class="row">
+                            <div class="col-md-12 grid-margin stretch-card">
+                                    <div class="card" style="height: 330px !important;">
+                                        <div class="card-body text-center">
+                                            <canvas id="myCanvas" style="width: 150px !important; height: 150px !important;">
+
+                                            </canvas>
+                                            <script th:inline="javascript">
+                                                var timeWork = [[${timeWorks}]];
+                                                var timeRetirement = [[${timeRetirements}]];
+
+                                                var timeWorkInSecond = Number(timeWork.split(':')[0])*60+Number(timeWork.split(':')[1])*60+Number(timeWork.split(':')[2])
+                                                var timeRetirementInSecond = Number(timeRetirement.split(':')[0])*60+Number(timeRetirement.split(':')[1])*60+Number(timeRetirement.split(':')[2])
+                                                console.log(timeWork)
+                                                $(document).ready(function(){
+                                                    var ctx = $("#myCanvas");
+                                                    //pie chart data
+                                                    var data = [timeWorkInSecond, timeRetirementInSecond];
+                                                    //draw
+                                                    var piechart = new Chart(ctx, {
+                                                        type: "pie",
+                                                        data:{
+                                                            datasets:[{
+                                                                data: data,
+                                                                backgroundColor:[
+                                                                    "red",
+                                                                    "blue"
+                                                                ],
+                                                                label: "Time"
+
+                                                            }],
+                                                            labels: [
+                                                                "Time Work (" + timeWork + ")",
+                                                                "Time Retirement (" + timeRetirement + ")"
+                                                            ]
+                                                        },
+                                                        options: {
+                                                            tooltips:{
+                                                               callbacks: {
+                                                                   label: function(tooltipItem, data){
+                                                                       return data.labels[tooltipItem.index];
+                                                                   }
+                                                               }
+                                                            },
+                                                            responsive: true,
+                                                            plugins: {
+                                                                datalabels: {
+                                                                    formatter: (value, ctx) => {
+
+                                                                    let sum = 0;
+                                                                    let dataArr = ctx.chart.data.datasets[0].data;
+                                                                    dataArr.map(data => {
+                                                                        sum += data;
+                                                                });
+                                                                    let percentage = (value*100 / sum).toFixed(2)+"%";
+                                                                    return percentage;
+
+
+                                                                },
+                                                                    color: '#fff',
+                                                                }
+                                                                }
+                                                        }
+
+                                                    })
+                                                });
+                                            </script>
+                                        </div>
+                                    </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <table id="order-listing" class="table dataTable no-footer" role="grid"
+                                       aria-describedby="order-listing_info">
+                                    <thead>
+                                    <tr role="row">
+                                        <th class="sorting_asc" tabindex="0"
+                                            aria-controls="order-listing" rowspan="1" colspan="1"
+                                            aria-sort="ascending"
+                                            aria-label="Order #: activate to sort column descending"
+                                            style="width: 55px;">Username
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="order-listing"
+                                            rowspan="1" colspan="1"
+                                            aria-label="Purchased On: activate to sort column ascending"
+                                            style="width: 100px;">Mac Address
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="order-listing"
+                                            rowspan="1" colspan="1"
+                                            aria-label="Customer: activate to sort column ascending"
+                                            style="width: 72px;">Date Work
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="order-listing"
+                                            rowspan="1" colspan="1"
+                                            aria-label="Ship to: activate to sort column ascending"
+                                            style="width: 53px;">Start Time Work
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="order-listing"
+                                            rowspan="1" colspan="1"
+                                            aria-label="Base Price: activate to sort column ascending"
+                                            style="width: 78px;">Time Work
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="order-listing"
+                                            rowspan="1" colspan="1"
+                                            aria-label="Purchased Price: activate to sort column ascending"
+                                            style="width: 117px;">Time Retirement
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <th:block th:include="fragments/footer"></th:block>
+            <!-- Custom js for this page-->
+            <script src="/js/data-table.js"></script>
+</body>
+</html>
+
+<!--<div class="col-md-6 grid-margin stretch-card">-->
+<!--    <div class="card">-->
+<!--        <div class="card-body text-center">-->
+<!--            <div class="text-success mb-4">-->
+<!--                <i class="mdi mdi-verified mdi-36px"></i>-->
+<!--                <p class="font-weight-medium mt-2">Time Work</p>-->
+<!--            </div>-->
+<!--            <h1 class="font-weight-light" th:text="${timeWorks}"></h1>-->
+<!--            <p class="text-muted mb-0">Time work of all employees</p>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div class="col-md-6 grid-margin stretch-card">-->
+<!--    <div class="card">-->
+<!--        <div class="card-body text-center">-->
+<!--            <div class="text-danger mb-4">-->
+<!--                <i class="mdi mdi-chart-pie mdi-36px"></i>-->
+<!--                <p class="font-weight-medium mt-2">Time Retirement</p>-->
+<!--            </div>-->
+<!--            <h1 class="font-weight-light" th:text="${timeRetirements}"></h1>-->
+<!--            <p class="text-muted mb-0">Time retirement of all employees</p>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
