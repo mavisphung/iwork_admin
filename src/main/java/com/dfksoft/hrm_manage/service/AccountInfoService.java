@@ -55,4 +55,10 @@ public class AccountInfoService {
 
         return accountInfoRepository.saveAndFlush(accountInfo);
     }
+
+    @Transactional
+    public List<AccountInfo> findAccountInfoByMacAddress(String macAddress) {
+        List<AccountInfo> accounts = accountInfoRepository.findAccountInfoByMacAddress(macAddress);
+        return accounts;
+    }
 }

@@ -1,5 +1,8 @@
 package com.dfksoft.hrm_manage.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.*;
 
 @Entity
@@ -19,12 +22,12 @@ public class Company {
     @Column(name = "status")
     private String status;
 
-    @ManyToOne
-    @JoinColumn(name = "id", insertable = false, updatable = false)
-    private Location location;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "company", cascade = {CascadeType.ALL})
+    // @JoinColumn(name = "company", insertable = false, updatable = false)
+    private List<Location> locations = new ArrayList<Location>();
 
-    public Location getLocation() {
-        return location;
+    public List<Location> getLocations() {
+        return locations;
     }
 
     public Company() {

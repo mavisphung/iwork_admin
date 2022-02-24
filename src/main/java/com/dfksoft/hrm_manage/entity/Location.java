@@ -2,6 +2,8 @@ package com.dfksoft.hrm_manage.entity;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "location")
 public class Location {
@@ -19,13 +21,14 @@ public class Location {
     @Column(name = "status")
     private int status;
 
-    @Column(name = "company_id")
+    @Column(name = "company_id", insertable = false, updatable = false)
     private int companyId;
 
-    @ManyToOne
-    @JoinColumn(name = "company_id", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+	@JoinColumn(name = "company_id")
     private Company company;
 
+    @JsonBackReference
     public Company getCompany() {
         return company;
     }

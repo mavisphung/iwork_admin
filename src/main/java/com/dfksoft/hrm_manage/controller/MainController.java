@@ -29,6 +29,11 @@ public class MainController {
         this.roleService = roleService;
     }
 
+    @GetMapping(value = "")
+    public String showIndex() {
+        return "redirect:dashboard";
+    }
+
     @GetMapping(value = "/login")
     public String loginForm(HttpServletRequest request) {
 
@@ -57,11 +62,11 @@ public class MainController {
             //encrypt password
             String encryptPassword = BCrypt.hashpw(password, BCrypt.gensalt());
             // create user
-            accountService.initAccount(username, encryptPassword, 1, 1, 1, 1);
+            Account account = accountService.initAccount(username, encryptPassword, 1, 1, 1, 1);
 //
-//            int accountId = account.getId();
-//
-//            accountInfoService.addNewAccountInfo("admin", "admin", "male", "DFK", "0987654321", accountId);
+            int accountId = account.getId();
+
+            accountInfoService.addNewAccountInfo("admin", "admin", "male", "DFK", "0987654321", accountId);
 
         } catch (Exception e) {
             return e.getMessage();
