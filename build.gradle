@@ -25,5 +25,11 @@ dependencies {
     //Spring security
     compile 'org.springframework.boot:spring-boot-starter-security:2.0.5.RELEASE'
     compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity4:3.0.2.RELEASE'
+
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+	annotationProcessor 'org.projectlombok:lombok:1.18.22'
+	
+	testCompileOnly 'org.projectlombok:lombok:1.18.22'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
     
 }

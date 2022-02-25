@@ -21,6 +21,8 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
 
     List<Report> findByMacAddress(String macaddress);
 
+    Report findOneByMacAddress(String macAddress);
+
     String currentWeekQuery = "SELECT * FROM report rp where YEARWEEK(rp.date_work, 1) = YEARWEEK(CURDATE(), 1) and rp.date_work <= curdate() and rp.mac_address = :mac order by rp.date_work";
     @Query(value = currentWeekQuery, nativeQuery = true)
     List<Report> findDataInCurrentWeek(@Param("mac") String mac);

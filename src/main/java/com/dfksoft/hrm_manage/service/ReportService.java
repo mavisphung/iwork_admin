@@ -301,4 +301,9 @@ public class ReportService {
 
         return convertTimeToString(reports, timeRetirement);
     }
+
+    public Report getReportByMacAddress(String macAddress) {
+        Report result = reportRepository.findOneByMacAddress(macAddress);
+        return result;
+    }
 }

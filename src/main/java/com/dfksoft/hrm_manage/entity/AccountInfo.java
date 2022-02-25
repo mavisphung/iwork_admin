@@ -2,6 +2,8 @@ package com.dfksoft.hrm_manage.entity;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "account_info")
 public class AccountInfo {
@@ -30,6 +32,7 @@ public class AccountInfo {
 
     @ManyToOne
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
+    @JsonBackReference
     private Account account;
 
     public Account getAccount() {

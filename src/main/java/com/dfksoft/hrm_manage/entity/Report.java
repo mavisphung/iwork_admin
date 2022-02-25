@@ -1,6 +1,13 @@
 package com.dfksoft.hrm_manage.entity;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+
+import lombok.Data;
+
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -9,6 +16,8 @@ import java.time.LocalTime;
 
 @Entity
 @Table(name = "report")
+@Data
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +28,7 @@ public class Report {
     private String username;
 
     @Column(name = "date_work")
+    @JsonProperty(value = "day_work")
     private LocalDate dateWork;
 
     @Column(name = "time_work")
